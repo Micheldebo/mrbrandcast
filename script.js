@@ -1,6 +1,12 @@
 document.addEventListener("DOMContentLoaded", function () {
   const loaderElement = document.querySelector(".loader");
-  loaderElement.style.display = "flex";
+  
+  // Disable loader on mobile
+  if (window.innerWidth > 640) {
+    loaderElement.style.display = "flex";
+  } else {
+    loaderElement.style.display = "none"; // Hide loader on mobile devices
+  }
 });
 
 window.onload = function () {
@@ -8,7 +14,10 @@ window.onload = function () {
 
   const loaderElement = document.querySelector(".loader");
 
-  gsap.to(".loader-container", { opacity: 1, duration: 1, onComplete: startLoaderAnimation });
+  // Only show loader animation on desktop
+  if (window.innerWidth > 640) {
+    gsap.to(".loader-container", { opacity: 1, duration: 1, onComplete: startLoaderAnimation });
+  }
 
   function startLoaderAnimation() {
     const loaderTl = gsap.timeline({
@@ -37,6 +46,7 @@ window.onload = function () {
         word.classList.add('active');
       }, index * 0.75);
     });
+  }
 
     const contentTl = gsap.timeline({
       scrollTrigger: {
@@ -67,27 +77,35 @@ window.onload = function () {
       }, index * 1.5);
     });
 
-    // Initialize Swiper
-    const gallerySlider = new Swiper(".swiper.is-gallery", {
-      loop: true,
-      slidesPerView: 2,
-      centeredSlides: true,
-      speed: 800,
-      grabCursor: true,
-      parallax: true,
-      navigation: {
-        nextEl: '.button-right',
-        prevEl: '.button-left'
+   // Initialize Swiper
+  const gallerySlider = new Swiper(".swiper.is-gallery", {
+    loop: true,
+    slidesPerView: 2,
+    centeredSlides: true,
+    speed: 800,
+    grabCursor: true,
+    parallax: true,
+    navigation: {
+      nextEl: '.button-right',
+      prevEl: '.button-left'
+    },
+    breakpoints: {
+      0: {
+        slidesPerView: 1.25,
+        navigation: {
+          nextEl: '.button-right', // Arrows for mobile as well
+          prevEl: '.button-left'
+        }
       },
-      breakpoints: {
-        0: {
-          slidesPerView: 1.25
-        },
-        640: {
-          slidesPerView: 2
+      640: {
+        slidesPerView: 2,
+        navigation: {
+          nextEl: '.button-right',
+          prevEl: '.button-left'
         }
       }
-    });
+    }
+  });
 
     // Cursor follow animation
     const cursorElements = [
